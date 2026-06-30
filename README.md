@@ -66,6 +66,51 @@ docker compose up -d
 
 Acesse: [http://localhost:3000](http://localhost:3000)
 
+## Praticando:
+
+Para entrar no container do PostgreSQL e listar as tabelas, o caminho mais direto é usar o `psql` que já vem dentro da própria imagem do Postgres:
+
+```bash
+docker exec -it postgres-db psql -U postgres -d aula
+```
+
+Isso te leva direto pro prompt do `psql` já conectado no banco `aula`. De lá, dentro do prompt:
+
+```sql
+\dt
+```
+
+lista as tabelas. Outros comandos úteis no mesmo prompt:
+
+```sql
+\d nome_da_tabela   -- estrutura de uma tabela específica (colunas, tipos, chaves)
+\l                  -- lista todos os bancos
+\du                 -- lista os usuários/roles
+\q                  -- sai do psql
+```
+
+Se preferir entrar no shell do container primeiro (bash) e só depois abrir o psql, também funciona:
+
+```bash
+docker exec -it postgres-db bash
+psql -U postgres -d aula
+```
+
+E se quiser rodar a query sem nem entrar interativamente, dá pra fazer tudo em uma linha só:
+
+```bash
+docker exec -it postgres-db psql -U postgres -d aula -c "\dt"
+```
+
+Uma observação que costuma confundir aluno: o `container_name: postgres-db` que você definiu no compose é o nome que usa no `docker exec` — não é `db` (que é só o nome do serviço, usado para comunicação interna entre containers, como na `DATABASE_URL` da API).
+
+para sair:
+
+```bash
+exit
+```
+
+
 ### Para derrubar os containers (e remover dados)
 
 ```bash
